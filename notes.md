@@ -4,23 +4,34 @@
 
 As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the application and debug through the code until you understand how it works. During the learning process fill out the following required pieces of information in order to demonstrate that you have successfully completed the deliverable.
 
-| User activity                                       | Frontend component | Backend endpoints | Database SQL |
-| --------------------------------------------------- | ------------------ | ----------------- | ------------ |
-| View home page                                      |                    |                   |              |
-| Register new user<br/>(t@jwt.com, pw: test)         |                    |                   |              |
-| Login new user<br/>(t@jwt.com, pw: test)            |                    |                   |              |
-| Order pizza                                         |                    |                   |              |
-| Verify pizza                                        |                    |                   |              |
-| View profile page                                   |                    |                   |              |
-| View franchise<br/>(as diner)                       |                    |                   |              |
-| Logout                                              |                    |                   |              |
-| View About page                                     |                    |                   |              |
-| View History page                                   |                    |                   |              |
-| Login as franchisee<br/>(f@jwt.com, pw: franchisee) |                    |                   |              |
-| View franchise<br/>(as franchisee)                  |                    |                   |              |
-| Create a store                                      |                    |                   |              |
-| Close a store                                       |                    |                   |              |
-| Login as admin<br/>(a@jwt.com, pw: admin)           |                    |                   |              |
-| View Admin page                                     |                    |                   |              |
-| Create a franchise for t@jwt.com                    |                    |                   |              |
-| Close the franchise for t@jwt.com                   |                    |                   |              |
+
+DONE, needs TA help though:
+
+| User Activity                         | Frontend Component(s)                              | Backend Endpoint(s)                                                                 | Database SQL                                                                 |
+|--------------------------------------|----------------------------------------------------|-------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| View home page                       | home.jsx                                           | none                                                                                | none                                                                         |
+| Register new user (t@jwt.com / test) | register.jsx                                       | POST /api/auth                                                                      | INSERT INTO user (name, email, password) VALUES (?, ?, ?)                    |
+|                                      |                                                    |                                                                                     | INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)               |
+| Login new user (t@jwt.com / test)    | login.tsx                                          | PUT /api/auth                                                                       | none                                                                         |
+| Order pizza                          | Menu.tsx, payment.tsx, delivery.tsx                | GET /api/order/menu                                                                | none                                                                         |
+|                                      |                                                    | GET /api/franchise                                                                 |                                                                              |
+|                                      |                                                    | GET /api/user/me                                                                   |                                                                              |
+|                                      |                                                    | POST /api/order                                                                    |                                                                              |
+| Verify pizza                         | delivery.tsx                                      | POST /api/order/verify                                                             | none                                                                         |
+| View profile page                   | dinerdashboard.tsx                                 | GET /api/order                                                                     | none                                                                         |
+| View franchise (as diner)           | franchise-dashboard.tsx                            | GET /api/franchise/8                                                               | none                                                                         |
+| Logout                               | home.jsx                                           | DELETE /api/auth                                                                   | none                                                                         |
+| View About page                     | about.tsx                                          | none                                                                                | none                                                                         |
+| View History page                   | history.tsx                                        | none                                                                                | none                                                                         |
+| Login as franchisee                 | login.tsx                                          | PUT /api/auth                                                                       | SELECT * FROM userRole WHERE userId = ?                                      |
+| View franchise (as franchisee)      | franchise-dashboard.tsx                            | GET /api/franchise/3                                                               | none                                                                         |
+| Create a store                      | createStore.tsx, franchise-dashboard.tsx           | POST /api/franchise/1/store                                                        | none                                                                         |
+|                                      |                                                    | GET /api/franchise/3                                                               |                                                                              |
+| Close a store                       | closeStore.tsx, franchise-dashboard.tsx            | DELETE /api/franchise/1/store/3                                                     | none                                                                         |
+|                                      |                                                    | GET /api/franchise/3                                                               |                                                                              |
+| Login as admin                      | login.tsx                                          | PUT /api/auth                                                                       | SELECT * FROM userRole WHERE userId = ?                                      |
+| View Admin page                    | adminDashboard.tsx                                 | GET /api/franchise                                                                 | none                                                                         |
+| Create franchise for t@jwt.com      | createFranchise.tsx, adminDashboard.tsx            | POST /api/franchise                                                                | none                                                                         |
+|                                      |                                                    | GET /api/franchise                                                                 |                                                                              |
+| Close franchise for t@jwt.com       | closeStore.tsx, adminDashboard.tsx                 | DELETE /api/franchise/1/store/2                                                     | none                                                                         |
+|                                      |                                                    | GET /api/franchise                                                                 |                                                                              |
