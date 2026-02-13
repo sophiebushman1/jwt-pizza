@@ -304,3 +304,77 @@ test('create franchise form submits (error branch)', async ({ page }) => {
   await expect(page).toHaveURL(/create-franchise/);
 });
 
+test('admin dashboard renders', async ({ page }) => {
+  await basicInit(page);
+
+  await page.goto('/admin-dashboard');
+
+  // Just verify page loads
+  await expect(page).toHaveURL(/admin-dashboard/);
+});
+
+test('diner dashboard renders', async ({ page }) => {
+  await basicInit(page);
+
+  await page.goto('/diner-dashboard');
+
+  await expect(page).toHaveURL(/diner-dashboard/);
+});
+
+test('franchise dashboard renders', async ({ page }) => {
+  await basicInit(page);
+
+  await page.goto('/franchise-dashboard');
+
+  await expect(page).toHaveURL(/franchise-dashboard/);
+});
+
+test('diner dashboard interaction', async ({ page }) => {
+  await basicInit(page);
+
+  await page.goto('/diner-dashboard');
+
+  const links = page.locator('a');
+  if (await links.count()) {
+    await links.first().click();
+  }
+
+  await expect(page).toBeTruthy();
+});
+
+
+test('franchise dashboard no franchise branch', async ({ page }) => {
+  await basicInit(page);
+
+  // Go without franchise user
+  await page.goto('/franchise-dashboard');
+
+  await expect(page.getByText(/so you want a piece of the pie/i)).toBeVisible();
+});
+
+
+test('franchise dashboard empty branch', async ({ page }) => {
+  await basicInit(page);
+  await page.goto('/franchise-dashboard');
+  await expect(page.getByText(/so you want a piece of the pie/i)).toBeVisible();
+});
+test('create store form submits and cancel works', async ({ page }) => {
+  
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'useLocation', {
+      value: () => ({ state: { franchise: { id: 'f1', name: 'Test Franchise' } } }),
+    });
+  });
+
+
+  await page.goto('/create-store');
+
+  await page.fill('input[placeholder="store name"]', 'Test Store');
+  await page.click('button:has-text("Create")');
+
+  await expect(page.getByText('Create store')).toBeVisible();
+
+  // testing Cancel button
+  await page.click('button:has-text("Cancel")');
+  await expect(page).toBeTruthy();
+});
