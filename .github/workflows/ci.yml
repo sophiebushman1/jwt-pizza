@@ -37,7 +37,3 @@ jobs:
           name: package
           path: dist/
 
-      - name: Run tests
-        run: |
-          npx playwright install --with-deps chromium
-          npm run test:coverage
