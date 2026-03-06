@@ -10,11 +10,15 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
+    outputs:
+      version: 1.0
+
     steps:
       - name: create static deployment file
         run: |
           mkdir dist
-          echo "<h1>Hello GitHub Pages</h1>" >> dist/index.html
+          echo "<h1>Hello GitHub Pages</h1>" > dist/index.html
 
       - name: Update dist artifact
         uses: actions/upload-artifact@v4
@@ -34,28 +38,30 @@ jobs:
           curl -s -X POST "https://pizza-factory.cs329.click/api/badge/${{ secrets.NET_ID }}/jwtpizzacoverage?label=Coverage&value=$coverage%25&color=$color" -H "authorization: bearer ${{ secrets.FACTORY_API_KEY }}"
 
   deploy:
-  needs: build
-  permissions:
-    id-token: write
-  runs-on: ubuntu-latest
-  env:
-    version: ${{needs.build.outputs.version}}
-  steps:
-    - name: Create OIDC token to AWS
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        audience: sts.amazonaws.com
-        aws-region: us-east-1
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
+    needs: build
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
 
-    - name: Download dist artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: package
-        path: dist/
+    env:
+      version: ${{ needs.build.outputs.version }}
 
-    - name: Push to AWS S3
-      run: |
-        echo Deploying $version
-        aws s3 cp dist s3://${{ secrets.APP_BUCKET }} --recursive
-        aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+    steps:
+      - name: Create OIDC token to AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: dist/
+
+      - name: Push to AWS S3
+        run: |
+          echo Deploying $version
+          aws s3 cp dist s3://${{ secrets.APP_BUCKET }} --recursive
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
