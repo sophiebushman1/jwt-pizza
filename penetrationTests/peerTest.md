@@ -152,15 +152,16 @@
 
 ## Boston attacks Sophia Bushman
 
-_Boston indicated that they had already achieved the grade they wanted for the course and chose not to participate in the peer attack portion of this deliverable. They did not make changes to their site for Deliverables 11 or 12, and did not perform attacks on my site. I reached out to my TA to explain the situation and was advised to document this and submit what I had completed on my end._
 
 ---
 
 ## Combined Summary of Learnings
 
-Full bilateral collaboration was not possible because my partner Boston opted out of the peer attack exchange. The summary below reflects learnings from my self-attacks and my attacks on Boston's site.
+
 
 Key takeaways from this penetration test:
+
+Sophie:
 
 - Access control must be verified on every endpoint individually — missing a single middleware call (as in the franchise delete route) creates a critical vulnerability regardless of how well other endpoints are protected. Both my site and Boston's had this same flaw, suggesting it is easy to overlook during development.
 - Default credentials and example passwords in public API documentation are a significant information disclosure risk that directly enables further attacks. Even after Boston removed passwords from `/api/docs`, the exposed email addresses alone were enough to authenticate as admin using well-known default passwords.
@@ -170,4 +171,4 @@ Key takeaways from this penetration test:
 
 ---
 
-_Star rating for partner Boston: ⭐⭐ — Partner did not participate in the peer attack exchange or make any fixes to their site._
+_Star rating for partner Boston: 
